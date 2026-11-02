@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Book {
+  id          Int       @id @default(autoincrement())
+  title       String
+  author      String
+  price       Float     @default(0)
+  stock       Int       @default(0)
+  publishedAt DateTime  @default(now())
+  coverUrl    String?
+  reviews     Review[]
+}
+
+model Employee {
+  id        Int    @id @default(autoincrement())
+  firstName String
+  lastName  String
+  phone     String
+  email     String @unique
+  position  String
+}
+
+model Review {
+  id      Int    @id @default(autoincrement())
+  rating  Int
+  content String
+  bookId  Int
+  book    Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
+
+  @@index([bookId])
+}
